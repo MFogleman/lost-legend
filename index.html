@@ -45,12 +45,6 @@
     let player = { x: 1, y: 1 };
     const exit = { x: cols-3, y: rows-3 };
 
-    // Load images
-    const dogImg = new Image();
-    dogImg.src = "https://i.imgur.com/lX8lD3n.png"; // 🐶 placeholder dog face
-    const chestImg = new Image();
-    chestImg.src = "https://i.imgur.com/n6bZyUe.png"; // 💎 placeholder treasure chest
-
     function drawMaze() {
       ctx.clearRect(0,0,canvas.width,canvas.height);
 
@@ -61,11 +55,14 @@
         }
       }
 
-      // Exit (chest)
-      ctx.drawImage(chestImg, exit.x * tileSize, exit.y * tileSize, tileSize, tileSize);
+      // Exit (treasure chest emoji)
+      ctx.font = `${tileSize * 0.9}px serif`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+      ctx.fillText("✨", exit.x * tileSize + tileSize/2, exit.y * tileSize + tileSize/2);
 
-      // Player (dog)
-      ctx.drawImage(dogImg, player.x * tileSize, player.y * tileSize, tileSize, tileSize);
+      // Player (dog emoji)
+      ctx.fillText("🐶", player.x * tileSize + tileSize/2, player.y * tileSize + tileSize/2);
     }
 
     function canMove(x, y) {
@@ -91,7 +88,7 @@
       drawMaze();
     });
 
-    dogImg.onload = chestImg.onload = drawMaze;
+    drawMaze();
   </script>
 </body>
 </html>
