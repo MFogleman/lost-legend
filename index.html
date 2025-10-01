@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Maze Game</title>
+  <style>
+    body { display: flex; justify-content: center; align-items: center; height: 100vh; background: #222; }
+    canvas { background: #fff; border: 3px solid #000; }
+  </style>
+</head>
+<body>
+  <canvas id="game" width="400" height="400"></canvas>
+
+  <script>
+    const canvas = document.getElementById("game");
+    const ctx = canvas.getContext("2d");
+
+    const tileSize = 40;
+    const maze = [
+      [1,1,1,1,1,1,1,1,1,1],
+      [1,0,0,0,1,0,0,0,0,1],
+      [1,0,1,0,1,0,1,1,0,1],
+      [1,0,1,0,0,0,0,1,0,1],
+      [1,0,1,1,1,1,0,1,0,1],
+      [1,0,0,0,0,1,0,1,0,1],
+      [1,1,1,1,0,1,0,1,0,1],
+      [1,0,0,0,0,0,0,0,0,1],
+      [1,0,1,1,1,1,1,1,0,1],
+      [1,1,1,1,1,1,1,1,1,1],
+    ];
+
+    let player = { x: 1, y: 1 };
+    const exit = { x: 8, y: 7 };
+
+    function drawMaze() {
+      for (let y = 0; y < maze.length; y++) {
+        for (let x = 0; x < maze[y].length; x++) {
+          if (maze[y][x] === 1) {
+            ctx.fillStyle = "#000";
+          } else {
+            ctx.fillStyle = "#fff";
+          }
+          ctx.fillRect(x * tileSize, y * tileSize, tileSize, tileSize);
+        }
+      }
+      // Exit
+      ctx.fillStyle = "green";
+      ctx.fillRect(exit.x * tileSize, exit.y * tileSize, tileSize, tileSize);
+      // Player
+      ctx.fillStyle = "red";
+      ctx.beginPath();
+      ctx.arc(player.x * tileSize + tileSize/2, player.y * tileSize + tileSize/2, tileSize/3, 0, Math.PI*2);
+      ctx.fill();
+    }
+
+    function canMove(x, y) {
+      return maze[y][x] === 0 || (x === exit.x && y === exit.y);
+    }
+
+    document.addEventListener("keydown", (e) => {
+      let newX = player.x;
+      let newY = player.y;
+      if (e.key === "ArrowUp") newY--;
+      if (e.key === "ArrowDown") newY++;
+      if (e.key === "ArrowLeft") newX--;
+      if (e.key === "ArrowRight") newX++;
+
+      if (canMove(newX, newY)) {
+        player.x = newX;
+        player.y = newY;
+      }
+
+      if (player.x === exit.x && player.y === exit.y) {
+        setTimeout(() => alert("🎉 You win!"), 100);
+      }
+
+      drawMaze();
+    });
+
+    drawMaze();
+  </script>
+</body>
+</html>
